@@ -1,9 +1,26 @@
 package ec.edu.epn;
 
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
+import org.junit.jupiter.params.provider.ValueSource;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 public class CalculatorTest {
-    private final Calculator calculator = new Calculator();
+    private Calculator calculator;
+
+    @BeforeEach
+    void setUp() {
+        calculator = new Calculator();
+    }
+
+    @AfterEach
+    void tearDown() {
+        calculator = null;
+    }
 
     // Method - case - expected result
     @Test
@@ -186,6 +203,53 @@ public class CalculatorTest {
         assert result == true;
     }
 
+    @ParameterizedTest
+    @ValueSource(ints = {2,30,-6,0})
+    void isEven_MultipleNumbers_ShouldReturnTrue(int number) {
+        assertTrue(calculator.isEven(number));
+
+    }
+
+    @ParameterizedTest
+    @CsvSource({
+            "1, 2, 3",
+            "5, 7, 12",
+            "1, -2, -1"
+    })
+    void add_MultipleValues_ReturnsCorrectSum(int a, int b, int expectedSum) {
+        assertEquals(expectedSum, calculator.add(a, b));
+    }
+
+    @ParameterizedTest
+    @CsvSource({
+            "10, 4, 6",
+            "5, 3, 2",
+            "-5, -3, -2"
+    })
+    void subtract_MultipleValues_ReturnsCorrectDifference(int a, int b, int expectedDifference) {
+        assertEquals(expectedDifference, calculator.subtract(a, b));
+    }
+
+    @ParameterizedTest
+    @CsvSource({
+            "5, 3, 15",
+            "4, -2, -8",
+            "10, 0, 0"
+    })
+    void multiply_MultipleValues_ReturnsCorrectProduct(int a, int b, int expectedProduct) {
+        assertEquals(expectedProduct, calculator.multiply(a, b));
+    }
+
+    @ParameterizedTest
+    @CsvSource({
+            "10, 2, 5.0",
+            "-10, -2, 5.0",
+            "10, 4, 2.5"
+    })
+    void divide_MultipleValues_ReturnsCorrectQuotient(int a, int b, double expectedQuotient) {
+        assertEquals(expectedQuotient, calculator.divide(a, b), 0.0001);
+    }
+
     // Method - case - expected result
     @Test
     void isEven_OddNumber_ReturnFalse() {
@@ -210,5 +274,30 @@ public class CalculatorTest {
 
         // Assert
         assert result == true;
+    }
+
+    @Test
+    void divide_PositiveNumbers_ReturnCorrectQuotient() {
+        double result = calculator.divide(10, 4);
+        assertEquals(2.5, result, 0.0001, "10 dividido entre 4 debe ser 2.5");
+    }
+
+    @Test
+    void divide_ByZero_ThrowsIllegalArgumentException() {
+        // Arrange
+        int a = 3;
+        int b = 0;
+
+        // Act
+        assertThrows(IllegalArgumentException.class, () -> calculator.divide(a, b),
+                "Dividir por cero debe lanzar IllegalArgumentException");
+    }
+
+    @Test
+    void divide_ByZero_ThrowsExceptionMessage() {
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
+            calculator.divide(5, 0);
+        });
+        assertEquals("The divisor cannot be zero.", exception.getMessage());
     }
 }
