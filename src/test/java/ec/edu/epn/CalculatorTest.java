@@ -2,6 +2,7 @@ package ec.edu.epn;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
@@ -24,6 +25,7 @@ public class CalculatorTest {
 
     // Method - case - expected result
     @Test
+    @DisplayName("Addition of two positive numbers should return correct sum")
     void add_TwoPositiveNumbers_ReturnCorrectSum() {
         // Arrange - Prepare
         int a = 3;
