@@ -161,7 +161,10 @@ public class CalculatorTest {
         double result = calculator.divide(a, b);
 
         // Assert
-        assert result == 5.0;
+        assertAll(
+                () -> assertEquals(5.0, result),
+                () -> assertTrue(result > 0)
+        );
     }
 
     // Method - case - expected result
